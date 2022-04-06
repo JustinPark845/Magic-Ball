@@ -1,3 +1,7 @@
 {
-  "name": "React-Native-TypeScript-Learning"
+  "name": "React-Native-TypeScript-Learning",
+  "dependencies": {
+    "@react-native-firebase/app": "^14.7.0",
+    "firebase": "^9.6.10"
+  }
 }

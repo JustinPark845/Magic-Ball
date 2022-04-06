@@ -1,10 +1,15 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Button} from 'react-native';
+import './src/constants/firebase';
 
 export default function App() {
+  function shake (): void {
+    console.log("shaken");
+  }
   return (
     <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
+      <Text>Welcome to the ReCirclable Magic 8 Ball!</Text>
+      <Button onPress={shake} title="Shake"/>
       <StatusBar style="auto" />
     </View>
   );
