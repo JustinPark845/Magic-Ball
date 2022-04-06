@@ -7,7 +7,7 @@ export default function App() {
   function shake (): void {
     console.log("shaken");
 
-    logCities();
+    readData();
 
     // const docRef = doc(db, "output", "help");
     // const docSnap = getDoc(docRef);
@@ -18,13 +18,11 @@ export default function App() {
 
   }
 
-  const logCities = async () => {
+  const readData = async () => {
     let docRef = collection(db, 'Output');
     console.log(docRef);
-    const docSnap = await doc(docRef);
-    // for(const doc of docSnap.docs){
-    // console.log(docSnap);
-    // }
+    const docSnap = await doc(docRef, 'Hoj4h4WH7TX10ywP5WBF');
+    console.log(docSnap);
   }
 
   return (
