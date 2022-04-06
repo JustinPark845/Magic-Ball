@@ -2,11 +2,12 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Button} from 'react-native';
 import { app, db } from './src/constants/firebase';
 import { collection, doc, getDoc, getDocs } from "firebase/firestore"; 
-import { async } from '@firebase/util';
 
 export default function App() {
   function shake (): void {
     console.log("shaken");
+
+    logCities();
 
     // const docRef = doc(db, "output", "help");
     // const docSnap = getDoc(docRef);
@@ -17,11 +18,15 @@ export default function App() {
 
   }
 
-  async getInfo () {
-    const docRef = doc(db, "cities", "SF");
-    const docSnap = await getDoc(docRef);
+  const logCities = async () => {
+    let docRef = collection(db, 'Output');
+    console.log(docRef);
+    const docSnap = await doc(docRef);
+    // for(const doc of docSnap.docs){
+    // console.log(docSnap);
+    // }
   }
-  
+
   return (
     <View style={styles.container}>
       <Text>Welcome to the ReCirclable Magic 8 Ball!</Text>
