@@ -1,71 +1,47 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Button} from 'react-native';
+import React, { useState } from 'react';
 // import { app, db } from './src/constants/firebase';
 // import { collection, doc, getDoc, getDocs } from "firebase/firestore"; 
 
 export default function App() {
-  function shake (): void {
-    console.log("shaken");
-    getPingFromApiAsync();
+  interface Result {
+    success?: boolean
+  }
+  interface PingResult {
+    result?: Result
   }
 
-  const getPingFromApiAsync = async () => {
+  const [data, setData] = useState([]);
+
+  function tapped (): void {
+    console.log("tapped");
+    getData();
+  }
+
+  const getData = async () => {
     try {
-      const response = await fetch(
-        'https://us-east4-recirclable-dev.cloudfunctions.net/call-ping'
-          // method: 'POST',
-          // headers: {
-          //   Accept: 'application/json',
-          //   'Content-Type': 'application/json'
-          // },
-          // body: JSON.stringify({
-          //   no wait: { 
-          //     data: { 
-          //       args:[ true ] 
-          //     } 
-          //   },
-          //   with error: { 
-          //     data: { 
-          //       args:[ “false” ] 
-          //     } 
-          //   },
-          //   with wait: { 
-          //     data: { 
-          //       args:[ “wait” ] 
-          //     } 
-          //   },
-        //   })
-        // }
-      );
+      const response = await fetch('https://us-east4-recirclable-dev.cloudfunctions.net/call-ping', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        },
+        // body: JSON.stringify({
+
+        // })
+      });
       const json = await response.json();
-      console.log(json);
-      return json.movies;
+        console.log(json);
     } catch (error) {
-      console.error(error);
+        console.error(error);
     }
   };
-
-    // readData();
-
-    // const docRef = doc(db, "output", "help");
-    // const docSnap = getDoc(docRef);
-    // console.log(docSnap);
-
-    // const querySnapshot = getDocs(collection(db, "Output"));
-    // console.log(querySnapshot);
-
-  // }
-
-  // const readData = async () => {
-  //   let docRef = collection(db, 'Output');
-  //   console.log(docRef);
-  //   const docSnap = await doc(docRef, 'Hoj4h4WH7TX10ywP5WBF');
-  //   console.log(docSnap);
 
   return (
     <View style={styles.container}>
       <Text>Welcome to the ReCirclable Magic 8 Ball!</Text>
-      <Button onPress={shake} title="Shake"/>
+      <Button onPress={tapped} title="Tap!"/>
       <StatusBar style="auto" />
     </View>
   );
