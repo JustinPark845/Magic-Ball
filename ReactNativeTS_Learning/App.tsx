@@ -6,7 +6,44 @@ import { StyleSheet, Text, View, Button} from 'react-native';
 export default function App() {
   function shake (): void {
     console.log("shaken");
+    getPingFromApiAsync();
   }
+
+  const getPingFromApiAsync = async () => {
+    try {
+      const response = await fetch(
+        'https://us-east4-recirclable-dev.cloudfunctions.net/call-ping'
+          // method: 'POST',
+          // headers: {
+          //   Accept: 'application/json',
+          //   'Content-Type': 'application/json'
+          // },
+          // body: JSON.stringify({
+          //   no wait: { 
+          //     data: { 
+          //       args:[ true ] 
+          //     } 
+          //   },
+          //   with error: { 
+          //     data: { 
+          //       args:[ “false” ] 
+          //     } 
+          //   },
+          //   with wait: { 
+          //     data: { 
+          //       args:[ “wait” ] 
+          //     } 
+          //   },
+        //   })
+        // }
+      );
+      const json = await response.json();
+      console.log(json);
+      return json.movies;
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
     // readData();
 
