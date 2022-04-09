@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image} from 'react-native';
+import { Text, View, Image} from 'react-native';
 import Ball from './src/components/ball';
 import styles from './src/styles/App.styles';
 // import { app, db } from './src/constants/firebase';

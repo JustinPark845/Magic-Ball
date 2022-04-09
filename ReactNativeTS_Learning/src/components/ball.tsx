@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Button, Image, Animated} from 'react-native';
+import { Text, View, Button, Image, Animated} from 'react-native';
 import React, { useState, useRef} from 'react';
 import styles from '../styles/ball.styles';
 // import { useTransition } from 'react-native-redash';
@@ -9,16 +9,25 @@ export default function Ball () {
             args: [string]
         }
     }
-    interface StyleInput {
+    interface ShakingStyleInput {
+        width: number,
+        height: number,
         transform: [{ 
-            rotate: {
-                inputRange: number[],
-                outputRange: string[],
-            }
+            rotate: Animated.Value,
         }]
+    }
+    interface FadeInStyleInput {
+        backgroundColor: string,
+        width: number,
+        alignItems: string,
+        paddingTop: number,
+        paddingBottom: number,
+        borderRadius: number,
+        opacity: Animated.Value
     }
 
     const shakeAnim = useRef(new Animated.Value(0)).current;
+    const fadeInAnim = useRef(new Animated.Value(0)).current;
     const [data, setData] = useState([]);
     const [magic8Response, setMagic8Response] = useState('');
     const [waiting, setWaiting] = useState(false);
@@ -43,6 +52,7 @@ export default function Ball () {
         } else {
             console.log("stop");
             Animated.timing(shakeAnim, {toValue: 0, duration: 0, useNativeDriver: true}).start();
+            Animated.timing(fadeInAnim, {toValue: 1, duration: 1000, useNativeDriver: true}).start();
         }
     }
 
@@ -60,7 +70,9 @@ export default function Ball () {
     }
 
     const magic8BallResponses: string[] = ['It is certain', 'It is decidedly so', 'Without a doubt', 'Yes - definitely', 'You may rely on it', 'As I see it, yes', 'Most likely', 'Outlook good', 'Yes', 'Signs point to yes', 'Reply hazy, try again', 'Ask again later', 'Better not tell you now', 'Cannot predict now', 'Concentrate and ask again', 'Dont count on it', 'My reply is no', 'My sources say no', 'Outlook not so good', 'Very doubtful'];
-    const animationStyleScale: StyleInput = {
+    const shakingAnimation: ShakingStyleInput = {
+        width : 250,
+        height: 250,
         transform: [{ 
             rotate: shakeAnim.interpolate({
                 inputRange: [-1, 1],
@@ -68,6 +80,15 @@ export default function Ball () {
             }) 
         }] 
     };
+    const fadeInAnimation: FadeInStyleInput  = {
+        backgroundColor: 'white',
+        width: 250,
+        alignItems: 'center',
+        paddingTop:0,
+        paddingBottom:15,
+        borderRadius: 10,
+        opacity: fadeInAnim,
+    }
     const inputDataDelay: Parameter = {
         data: {
             args: ["wait"]
@@ -96,8 +117,10 @@ export default function Ball () {
     return (
         <View style={styles.ball}>
             <View style={styles.activate}>
-                <Animated.Image source={require('../../assets/logo.png')} style={ animationStyleScale }/>
-                <Text style={styles.response}>{magic8Response}</Text>
+                <Animated.Image source={require('../../assets/logo.png')} style={shakingAnimation}/>
+                <Animated.View style={fadeInAnimation}>
+                    <Text style={styles.response}>{magic8Response}</Text>
+                </Animated.View>
             </View>
             <Button onPress={shake} title="Shake!" color='#005f60'/>
         </View>
