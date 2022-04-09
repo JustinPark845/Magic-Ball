@@ -1,17 +1,24 @@
 import { StyleSheet, Text, View, Button, Image, Animated} from 'react-native';
-import React, { useState } from 'react';
-import styles from '../styles/App.styles';
-import { useTransition } from 'react-native-redash';
+import React, { useState, useRef} from 'react';
+import styles from '../styles/ball.styles';
+// import { useTransition } from 'react-native-redash';
 
 export default function Ball () {
-    interface Arguments {
-        args: [string]
-    }
-
     interface Parameter {
-        data : Arguments
+        data : {
+            args: [string]
+        }
+    }
+    interface StyleInput {
+        transform: [{ 
+            rotate: {
+                inputRange: number[],
+                outputRange: string[],
+            }
+        }]
     }
 
+    const shakeAnim = useRef(new Animated.Value(0)).current;
     const [data, setData] = useState([]);
     const [magic8Response, setMagic8Response] = useState('');
     const [waiting, setWaiting] = useState(false);
@@ -25,7 +32,18 @@ export default function Ball () {
     }
 
     function shakeAnimation (isActive: boolean): void {
-
+        if (isActive === true) {
+            console.log("start");
+            Animated.loop(
+                Animated.sequence([
+                    Animated.timing(shakeAnim, {toValue: 1, duration: 100, useNativeDriver: true}),
+                    Animated.timing(shakeAnim, {toValue: -1, duration: 100, useNativeDriver: true}),
+                ]) 
+            ).start();
+        } else {
+            console.log("stop");
+            Animated.timing(shakeAnim, {toValue: 0, duration: 0, useNativeDriver: true}).start();
+        }
     }
 
     function revealLoading (): void {
@@ -41,8 +59,15 @@ export default function Ball () {
         setMagic8Response(magic8BallResponses[Math.floor(Math.random()*magic8BallResponses.length)]);
     }
 
-    // const clock = new Clock();
     const magic8BallResponses: string[] = ['It is certain', 'It is decidedly so', 'Without a doubt', 'Yes - definitely', 'You may rely on it', 'As I see it, yes', 'Most likely', 'Outlook good', 'Yes', 'Signs point to yes', 'Reply hazy, try again', 'Ask again later', 'Better not tell you now', 'Cannot predict now', 'Concentrate and ask again', 'Dont count on it', 'My reply is no', 'My sources say no', 'Outlook not so good', 'Very doubtful'];
+    const animationStyleScale: StyleInput = {
+        transform: [{ 
+            rotate: shakeAnim.interpolate({
+                inputRange: [-1, 1],
+                outputRange: ['-0.1rad', '0.1rad']
+            }) 
+        }] 
+    };
     const inputDataDelay: Parameter = {
         data: {
             args: ["wait"]
@@ -70,9 +95,11 @@ export default function Ball () {
         
     return (
         <View style={styles.ball}>
-            <Image source={require('../../assets/logo.png')}/>
+            <View style={styles.activate}>
+                <Animated.Image source={require('../../assets/logo.png')} style={ animationStyleScale }/>
+                <Text style={styles.response}>{magic8Response}</Text>
+            </View>
             <Button onPress={shake} title="Shake!" color='#005f60'/>
-            <Text>{magic8Response}</Text>
         </View>
     )
 }
