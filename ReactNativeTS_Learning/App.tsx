@@ -80,10 +80,11 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      {/* <Animated.View style={{ transform: [{translateX: shakeAnimation}] }}></Animated.View> */}
-      <Ball />
-      <Image source={require('./assets/recirclable.png')}/>
-      <Text>Welcome to the ReCirclable Magic 8 Ball!</Text>
+      <View style={styles.title}>
+        <Image source={require('./assets/title.png')}/>
+        <Text>Welcome to the ReCirclable Magic 8 Ball!</Text>
+      </View>
+      <Image source={require('./assets/logo.png')}/>
       <Button onPress={shake} title="Shake!" color='#005f60'/>
       <Text>{magic8Response}</Text>
       <StatusBar style="auto" />
@@ -98,4 +99,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  title: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingBottom: '5%',
+  }
 });
