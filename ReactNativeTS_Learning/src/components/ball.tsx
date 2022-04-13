@@ -2,14 +2,7 @@ import { Text, View, Button, Animated} from 'react-native';
 import React, { useEffect, useState, useRef} from 'react';
 import styles from '../styles/ball.styles';
 
-interface Props {
-
-}
-interface State {
-
-}
-
-export default function Ball (): React.Component<Props, State> {
+export default function Ball (): React.Component<any, any> {
     interface BodyParameter {
         data : {
             args: [string]
@@ -96,15 +89,16 @@ export default function Ball (): React.Component<Props, State> {
             const json = await response.json();
             if (!response.ok) {
                 console.log(response.status);
-                throw new Error(`Error status: ${response.status}`);
+                throw new Error(`Error status: ${response.status}, Could not find response! Please Shake Again.`);
             }
             // Check success
             if (!json.result.success) {
-                console.log(response);
-                throw new Error(`Error: unsuccessful`);
+                console.log('unsuccessful');
+                throw new Error(`Error status: success = false. Shake was weak. Please Shake Again.`);
             // save data into useState
             } else {
                 // setData(json);
+                console.log('success');
                 // Randomly generate an 8ball response
                 selectResponse();
             }
