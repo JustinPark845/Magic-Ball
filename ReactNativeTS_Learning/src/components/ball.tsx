@@ -20,11 +20,11 @@ export default function Ball () {
     interface FadeInStyleInput {
         backgroundColor: string,
         width: number,
-        alignItems: string,
+        alignItems: "center" | "flex-start" | "flex-end" | "stretch",
         paddingTop: number,
         paddingBottom: number,
         borderRadius: number,
-        opacity: any,
+        opacity: Animated.Value,
     }
 
     // const [data, setData] = useState<BodyParameter>({data: {args: [""]}}); <-- In case I do want to save the 'success' value
