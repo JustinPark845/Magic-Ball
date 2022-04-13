@@ -2,7 +2,14 @@ import { Text, View, Button, Animated} from 'react-native';
 import React, { useEffect, useState, useRef} from 'react';
 import styles from '../styles/ball.styles';
 
-export default function Ball (): React.Component<any, any> {
+interface Props {
+    _: any,
+}
+interface State {
+    _: any,
+}
+
+export default function Ball (): React.Component<Props, State> {
     interface BodyParameter {
         data : {
             args: [string]
