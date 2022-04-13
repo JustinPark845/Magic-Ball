@@ -15,7 +15,7 @@ responseContainer: {
   width: 250,
   alignItems: 'center',
   paddingTop:0,
-  paddingBottom:15,
+  paddingBottom:0,
   borderRadius: 10,
 },
 response: {

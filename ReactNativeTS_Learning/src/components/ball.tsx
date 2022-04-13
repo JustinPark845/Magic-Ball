@@ -1,9 +1,9 @@
-import { Text, View, Button, Image, Animated} from 'react-native';
-import React, { useEffect, useState, useRef, FC} from 'react';
+import { Text, View, Button, Animated} from 'react-native';
+import React, { useEffect, useState, useRef} from 'react';
 import styles from '../styles/ball.styles';
 
 export default function Ball () {
-    interface Parameter {
+    interface BodyParameter {
         data : {
             args: [string]
         }
@@ -12,7 +12,9 @@ export default function Ball () {
         width: number,
         height: number,
         transform: [{ 
-            rotate: Animated.Value,
+            // Type of rotate should be  "loadingAnim.interpolate()", however it is last as
+            // any as I do not currently know its typing
+            rotate: any,
         }]
     }
     interface FadeInStyleInput {
@@ -22,19 +24,34 @@ export default function Ball () {
         paddingTop: number,
         paddingBottom: number,
         borderRadius: number,
-        opacity: Animated.Value
+        opacity: any,
     }
 
-    const loadingAnim = useRef(new Animated.Value(0)).current;
-    const fadeInAnim = useRef(new Animated.Value(0)).current;
-    const [data, setData] = useState<Parameter>({data: {args: [""]}});
+    // const [data, setData] = useState<BodyParameter>({data: {args: [""]}}); <-- In case I do want to save the 'success' value
     const [magic8Response, setMagic8Response] = useState<string>('');
     const [waiting, setWaiting] = useState<boolean>(false);
+    const loadingAnim = useRef(new Animated.Value(1)).current;
+    const fadeInAnim = useRef(new Animated.Value(0)).current;
+    const magic8BallResponses: string[] = ['It is certain', 'It is decidedly so', 'Without a doubt', 'Yes - definitely', 'You may rely on it', 'As I see it, yes', 'Most likely', 'Outlook good', 'Yes', 'Signs point to yes', 'Reply hazy, try again', 'Ask again later', 'Better not tell you now', 'Cannot predict now', 'Concentrate and ask again', 'Dont count on it', 'My reply is no', 'My sources say no', 'Outlook not so good', 'Very doubtful'];
+    // body parameter for fetch
+    const inputDataDelay: BodyParameter = {
+        data: {
+            args: ["random"]
+        }
+    }
 
+    // Activates upon change in state "waiting"
+    const firstRender = useRef(true);
     useEffect(() => {
-        loadingAnimation(waiting);
-    });
+        // Dont activate on first render of the screen
+        if (firstRender.current) {
+            firstRender.current = false;
+        } else {
+            loadingAnimation(waiting);
+        }
+    }, [waiting]);
 
+    // Start animation if "waiting" === true, stop if "waiting" === false
     function loadingAnimation (isActive: boolean): void {
         if (isActive === true) {
             Animated.loop(
@@ -45,18 +62,15 @@ export default function Ball () {
             ).start();
             Animated.timing(fadeInAnim, {toValue: 0, duration: 1000, useNativeDriver: true}).start();
         } else {
-            selectResponse();
             Animated.timing(loadingAnim, {toValue: 0, duration: 0, useNativeDriver: true}).start();
             Animated.timing(fadeInAnim, {toValue: 1, duration: 1000, useNativeDriver: true}).start();
         }
     }
 
-    function selectResponse(): void {
-        setMagic8Response(magic8BallResponses[Math.floor(Math.random()*magic8BallResponses.length)]);
-    }
-
+    // Button tapped
     function tapped (): void {
         console.log("tapped");
+        // fetch api
         apiFetch();
     }
 
@@ -71,15 +85,33 @@ export default function Ball () {
                 },
                 body: JSON.stringify(inputDataDelay)
             });
+            // Check HTTP Status
             const json = await response.json();
-                setData(json);
-                setWaiting(false);
+            if (!response.ok) {
+                console.log(response.status);
+                throw new Error(`Error status: ${response.status}`);
+            }
+            // Check success
+            if (!json.result.success) {
+                console.log(response);
+                throw new Error(`Error: unsuccessful`);
+            // save data into useState
+            } else {
+                // setData(json);
+                // Randomly generate an 8ball response
+                selectResponse();
+            }
         } catch (error) {
             console.error(error);
         }
+        setWaiting(false);
     };
 
-    const magic8BallResponses: string[] = ['It is certain', 'It is decidedly so', 'Without a doubt', 'Yes - definitely', 'You may rely on it', 'As I see it, yes', 'Most likely', 'Outlook good', 'Yes', 'Signs point to yes', 'Reply hazy, try again', 'Ask again later', 'Better not tell you now', 'Cannot predict now', 'Concentrate and ask again', 'Dont count on it', 'My reply is no', 'My sources say no', 'Outlook not so good', 'Very doubtful'];
+    function selectResponse(): void {
+        setMagic8Response(magic8BallResponses[Math.floor(Math.random()*magic8BallResponses.length)]);
+    }
+
+    // Style script
     const shakingAnimation: ShakingStyleInput = {
         width : 250,
         height: 250,
@@ -94,13 +126,10 @@ export default function Ball () {
         backgroundColor: 'white',
         width: 250,
         alignItems: 'center',
+        paddingTop:0,
+        paddingBottom:10,
         borderRadius: 10,
         opacity: fadeInAnim,
-    }
-    const inputDataDelay: Parameter = {
-        data: {
-            args: ["wait"]
-        }
     }
         
     return (
