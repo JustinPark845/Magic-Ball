@@ -30,7 +30,7 @@ export default function Ball (): React.Component<any, any> {
     // const [data, setData] = useState<BodyParameter>({data: {args: [""]}}); <-- In case I do want to save the 'success' value
     const [magic8Response, setMagic8Response] = useState<string>('');
     const [waiting, setWaiting] = useState<boolean>(false);
-    const loadingAnim = useRef(new Animated.Value(1)).current;
+    const loadingAnim = useRef(new Animated.Value(0)).current;
     const fadeInAnim = useRef(new Animated.Value(0)).current;
     const magic8BallResponses: string[] = ['It is certain', 'It is decidedly so', 'Without a doubt', 'Yes - definitely', 'You may rely on it', 'As I see it, yes', 'Most likely', 'Outlook good', 'Yes', 'Signs point to yes', 'Reply hazy, try again', 'Ask again later', 'Better not tell you now', 'Cannot predict now', 'Concentrate and ask again', 'Dont count on it', 'My reply is no', 'My sources say no', 'Outlook not so good', 'Very doubtful'];
     // body parameter for fetch
