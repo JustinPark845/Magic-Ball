@@ -96,12 +96,11 @@ export default function Ball (): React.FunctionComponent<{}>{
                 console.log('unsuccessful');
                 throw new Error(`Error status: success = false. Shake was weak. Please Shake Again.`);
             // save data into useState
-            } else {
-                // setData(json);
-                console.log('success');
-                // Randomly generate an 8ball response
-                selectResponse();
             }
+            // setData(json);
+            console.log('success');
+            // Randomly generate an 8ball response
+            selectResponse();
         } catch (error) {
             console.error(error);
         }
