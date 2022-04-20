@@ -29,8 +29,9 @@ export default function Ball (): React.FunctionComponent<{}>{
 
     // const [data, setData] = useState<BodyParameter>({data: {args: [""]}}); <-- In case I do want to save the 'success' value
     const [magic8Response, setMagic8Response] = useState<string>('');
+    const [firstRender, setFirstRender] = useState<boolean>(true);
     const [waiting, setWaiting] = useState<boolean>(false);
-    const loadingAnim = useRef(new Animated.Value(0)).current;
+    const loadingAnim = new Animated.Value(0);
     const fadeInAnim = useRef(new Animated.Value(0)).current;
     const magic8BallResponses: string[] = ['It is certain', 'It is decidedly so', 'Without a doubt', 'Yes - definitely', 'You may rely on it', 'As I see it, yes', 'Most likely', 'Outlook good', 'Yes', 'Signs point to yes', 'Reply hazy, try again', 'Ask again later', 'Better not tell you now', 'Cannot predict now', 'Concentrate and ask again', 'Dont count on it', 'My reply is no', 'My sources say no', 'Outlook not so good', 'Very doubtful'];
     // body parameter for fetch
@@ -41,11 +42,10 @@ export default function Ball (): React.FunctionComponent<{}>{
     }
 
     // Activates upon change in state "waiting"
-    const firstRender = useRef(true);
     useEffect(() => {
         // Dont activate on first render of the screen
-        if (firstRender.current) {
-            firstRender.current = false;
+        if (firstRender) {
+            setFirstRender(false);
         } else {
             loadingAnimation(waiting);
         }
