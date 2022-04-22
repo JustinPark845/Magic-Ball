@@ -29,7 +29,6 @@ export default function Ball (): React.FunctionComponent<{}>{
 
     // const [data, setData] = useState<BodyParameter>({data: {args: [""]}}); <-- In case I do want to save the 'success' value
     const [magic8Response, setMagic8Response] = useState<string>('');
-    const [firstRender, setFirstRender] = useState<boolean>(true);
     const [waiting, setWaiting] = useState<boolean>(false);
     const loadingAnim = new Animated.Value(0);
     const fadeInAnim = useRef(new Animated.Value(0)).current;
@@ -43,12 +42,7 @@ export default function Ball (): React.FunctionComponent<{}>{
 
     // Activates upon change in state "waiting"
     useEffect(() => {
-        // Dont activate on first render of the screen
-        if (firstRender) {
-            setFirstRender(false);
-        } else {
-            loadingAnimation(waiting);
-        }
+        loadingAnimation(waiting);
     }, [waiting]);
 
     // Start animation if "waiting" === true, stop if "waiting" === false
